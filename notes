@@ -1,0 +1,1 @@
+DEBUG=pg-user-mongoos:* npm start
