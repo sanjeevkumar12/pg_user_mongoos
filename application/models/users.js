@@ -32,8 +32,11 @@ UserSchema.pre('save', function(next) {
     });
 });
 
-UserSchema.methods.comparePassword = function(candidatePassword, cb) {
-    return bcrypt.compareSync(candidatePassword, this.password);
+UserSchema.methods.comparePassword = (candidatePassword,callBack) => {
+    bcrypt.compare(candidatePassword, this.password, (error, is_match)=>{
+        if(err) return cb(err);
+        cb(null,isMatch);
+    });
 };
 
 
@@ -43,14 +46,14 @@ UserSchema.methods.generateJWT = function() {
   exp.setDate(today.getDate() + 60);
   return jwt.sign({
     id: this._id,
-    username: this.username,
+    email: this.email,
     exp: parseInt(exp.getTime() / 1000),
   }, config.TOKEN_SECRET);
 };
 
-UserSchema.statics.findByToken = function (token, callBack) {
+UserSchema.statics.findByToken = (token, callBack) => {
     var user = this;
-    jwt.verify(token, config.TOKEN_SECRET, function (err, decode) {
+    jwt.verify(token, config.TOKEN_SECRET, (err, decode) => {
     console.log(decode);
     user.findOne({ "_id": decode}, function (err, user) {
         if (err) return callBack(err);
@@ -61,7 +64,7 @@ UserSchema.statics.findByToken = function (token, callBack) {
 
 UserSchema.statics.findByEmail = function (email, callBack) {
     var user = this;
-    user.findOne({ "email": email}, function (err, user) {
+    user.findOne({ "email": email}, (err, user) => {
     if (err) return callBack(err);
         callBack(null, user);
     });

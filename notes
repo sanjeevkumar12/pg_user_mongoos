@@ -1,1 +1,8 @@
 DEBUG=pg-user-mongoos:* npm start
+
+
+git remote add origin https://sanjeevkumar12@github.com/sanjeevkumar12/pg_user_mongoos.git
+
+git branch -M master
+
+git push -u origin master

@@ -1,21 +1,11 @@
-const validationResult = require('express-validator');
-const {User } = require('../models/users');
-exports.register_user = async ( req, res) => {
-    var user = new User(req.validate_data || req.body);
-    await user.save((err, doc) => {
-        if (err) {
-            return res.status(422).json({errors:err})
-        } else {
-            const userData = {
-                first_name: doc.first_name,
-                last_name: doc.last_name,
-                email: doc.email,
-            }
-            return res.status(200).json({
-                success: true,
-                message: 'Successfully Signed Up',
-                userData
-            })
+const {login_user, create_user} = require('../services/auth.service')
+exports.register_user = ( req, res) => {
+    return create_user(req).then(user=> user ? res.json(user) : res.status(400).json({ message: 'Username or password is incorrect' }))
+}
+exports.login = ( req, res) => {
+    return login_user(req, res).then((user, error)=>{
+        if(user){
+
         }
     });
 }
