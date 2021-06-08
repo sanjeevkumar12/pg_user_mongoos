@@ -4,9 +4,7 @@ const AuthenticateMiddleware = () => {
         const authHeader = req.headers.authorization;
         if (authHeader) {
             const token = authHeader.split(' ')[1];
-            console.log(token)
             let token_details = user_token_details(token).then((user) => {
-                console.log(user)
                 req.user = user
                 next()
             }).catch(err => {next(err)})

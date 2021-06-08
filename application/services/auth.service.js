@@ -1,6 +1,7 @@
 const {User} = require('../models/users');
 const {ValidationError, BadRequest} = require('../errors/throwable')
-const {ADMIN_EMAIL_ADDRESS} = require('../conf/settings')
+const {ADMIN_EMAIL_ADDRESS, DEFAULT_EMAIL_FROM_ADDRESS} = require('../conf/settings')
+const {send_verification_mail} = require('../helpers/emails/auth')
 
 login_user = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
@@ -31,6 +32,7 @@ create_user = async (req, res) => {
     }
     const user = new User(req.validate_data || req.body);
     await user.save();
+    send_verification_mail(user.email, 'DEFAULT_EMAIL_FROM_ADDRESS', 'Please verify your email address start using application.', {})
     return user
 }
 
