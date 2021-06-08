@@ -1,24 +1,25 @@
-var createError = require('http-errors');
-var express = require('express');
+const createError = require('http-errors');
+const express = require('express');
 
 /** load env */
-var dotenv = require('dotenv')
+const dotenv = require('dotenv')
 dotenv.config();
 
 
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var compression = require('compression');
-var cors = require('cors')
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const compression = require('compression');
+const cors = require('cors')
 
 /** Local Import and Initializations */
-var usersRouter = require('./application/routes/user.routes');
-var authRouter = require('./application/routes/auth.routes');
-var connectDB = require('./application/core/db')
+const usersRouter = require('./application/routes/user.routes');
+const authRouter = require('./application/routes/auth.routes');
+const connectDB = require('./application/core/db')
+const handleErrors = require('./application/errors/handlers')
 
 
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 app.use(cors())
@@ -31,7 +32,7 @@ connectDB()
 
 
 /** Router Settings ***/
-var api_router = express.Router()
+const api_router = express.Router()
 api_router.use('/users', usersRouter);
 api_router.use('/auth', authRouter);
 app.use('/api', api_router)
@@ -47,14 +48,6 @@ app.use(function(req, res, next) {
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.json(err)
-});
+app.use(handleErrors);
 
 module.exports = app;

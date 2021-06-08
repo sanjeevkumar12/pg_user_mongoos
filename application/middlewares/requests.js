@@ -13,7 +13,7 @@ const PostRequestMiddleware = (schema, property) => {
         error_d[item.path[0]] = item.message;
         return error_d;
       })
-      res.status(422).json({ error: messages }) 
+      res.status(422).json({ errors: messages, success: false })
     } 
   } 
 } 

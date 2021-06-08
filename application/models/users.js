@@ -12,10 +12,19 @@ const UserSchema = new Schema(
         /*username: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/^[a-zA-Z0-9]+$/, 'is invalid'], index: true},*/
         email : {type: String, lowercase: true, required: [true, 'Email Cannot be blank'], index: { unique: true }},
         is_active : {type : Boolean, required: false , default :false},
-        password : {type: String, required: true }
+        password : {type: String, required: true },
+        is_verified: {type : Boolean, required: false , default :false}
     },
     {
-		timestamps:true
+		timestamps:true,
+        toJSON : {
+		    transform : (doc, ret) => {
+		        ret.id = ret._id
+		        delete ret._id
+                delete ret.__v
+                delete ret.password
+            }
+        }
 	}
 )
 
@@ -32,11 +41,8 @@ UserSchema.pre('save', function(next) {
     });
 });
 
-UserSchema.methods.comparePassword = (candidatePassword,callBack) => {
-    bcrypt.compare(candidatePassword, this.password, (error, is_match)=>{
-        if(err) return cb(err);
-        cb(null,isMatch);
-    });
+UserSchema.methods.comparePassword = async function(candidatePassword){
+    return await bcrypt.compare(candidatePassword, this.password);
 };
 
 
@@ -51,19 +57,14 @@ UserSchema.methods.generateJWT = function() {
   }, config.TOKEN_SECRET);
 };
 
-UserSchema.statics.findByToken = (token, callBack) => {
-    var user = this;
-    jwt.verify(token, config.TOKEN_SECRET, (err, decode) => {
-    console.log(decode);
-    user.findOne({ "_id": decode}, function (err, user) {
-        if (err) return callBack(err);
-            callBack(null, user);
-        });
-    });
+UserSchema.statics.findByToken = async function (token) {
+    let token_data = await jwt.verify(token, config.TOKEN_SECRET)
+    console.log(token_data);
+    let user = await User.findOne({ "_id": decode})
 };
 
 UserSchema.statics.findByEmail = function (email, callBack) {
-    var user = this;
+    const user = this;
     user.findOne({ "email": email}, (err, user) => {
     if (err) return callBack(err);
         callBack(null, user);
