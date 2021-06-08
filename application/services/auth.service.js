@@ -1,6 +1,7 @@
 const {User} = require('../models/users');
 const {ValidationError, BadRequest} = require('../errors/throwable')
 const {ADMIN_EMAIL_ADDRESS} = require('../conf/settings')
+
 login_user = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if(user){
@@ -33,11 +34,12 @@ create_user = async (req, res) => {
     return user
 }
 
-user_token_details = async (req, res) => {
-    User.findByToken(req.header.token)
+user_token_details = async (token) => {
+    return await User.findByToken(token);
 }
 
 module.exports = {
     login_user,
-    create_user
+    create_user,
+    user_token_details
 }

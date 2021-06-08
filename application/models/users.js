@@ -59,8 +59,8 @@ UserSchema.methods.generateJWT = function() {
 
 UserSchema.statics.findByToken = async function (token) {
     let token_data = await jwt.verify(token, config.TOKEN_SECRET)
-    console.log(token_data);
-    let user = await User.findOne({ "_id": decode})
+    let user = await User.findOne({ "_id": token_data.id})
+    return user
 };
 
 UserSchema.statics.findByEmail = function (email, callBack) {
