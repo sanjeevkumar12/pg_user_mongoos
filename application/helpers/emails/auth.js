@@ -1,14 +1,21 @@
+const ejs = require('ejs');
+const path = require('path');
 const transport = require('../../core/email');
-const pug = require('ejs');
+const config = require('../../conf/settings')
 
-const send_verification_mail = (to_email, from_email, subject, email_data) => {
+
+const get_template = (template_name) => {
+    return path.join(config.EMAIL_TEMPLATE_DIR, template_name)
+}
+
+const send_verification_mail = async (to_email, from_email, subject, email_data) => {
+    const html = await ejs.renderFile(get_template('auth/user.email.verify.ejs'), email_data, {async: true});
     const mailData = {from: 'youremail@gmail.com',
         to: to_email,
         subject: subject,
         text: '',
-        html: '<b>Hey there! </b><br> This is our first message sent with Nodemailer<br/>',
+        html: html
     };
-    pug.renderFile('../view')
      transport.sendMail(mailData, (err, info) => {
         if(err){
             console.log(err);

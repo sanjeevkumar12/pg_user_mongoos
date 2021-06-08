@@ -1,4 +1,5 @@
-console.log('Loading System Settings')
+console.log('Loading System Settings');
+const path = require('path');
 
 module.exports = {
     MONGO_URI : process.env.MONGO_URI,
@@ -9,5 +10,6 @@ module.exports = {
     SMTP_EMAIL_USERNAME:process.env.SMTP_EMAIL_USERNAME,
     SMTP_EMAIL_PASSWORD:process.env.SMTP_EMAIL_PASSWORD,
     SMTP_EMAIL_PORT:process.env.SMTP_EMAIL_PORT,
-    DEFAULT_EMAIL_FROM_ADDRESS: 'adminfrom@testapp.com'
+    DEFAULT_EMAIL_FROM_ADDRESS: 'adminfrom@testapp.com',
+    EMAIL_TEMPLATE_DIR : path.join(path.dirname(path.dirname(__dirname)),'views','emails')
 }

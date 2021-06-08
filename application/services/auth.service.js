@@ -32,7 +32,7 @@ create_user = async (req, res) => {
     }
     const user = new User(req.validate_data || req.body);
     await user.save();
-    send_verification_mail(user.email, 'DEFAULT_EMAIL_FROM_ADDRESS', 'Please verify your email address start using application.', {})
+    await send_verification_mail(user.email, 'DEFAULT_EMAIL_FROM_ADDRESS', 'Please verify your email address start using application.', {})
     return user
 }
 
