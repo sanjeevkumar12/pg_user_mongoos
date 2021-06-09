@@ -25,6 +25,11 @@ const send_verification_mail = async (to_email, from_email, subject, email_data)
 
 }
 
+const send_forgot_password_request_mail = async (to_email, from_email, subject, email_data) => {
+
+}
+
 module.exports = {
-    send_verification_mail
+    send_verification_mail,
+    send_forgot_password_request_mail
 }

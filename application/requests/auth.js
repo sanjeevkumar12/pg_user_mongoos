@@ -14,7 +14,7 @@ const RegisterSchema = Joi.object({
     password: Joi.string().required().label('Password')
         .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).strict(),
 
-    confirm_password: Joi.string().label('Confirm Password').valid(Joi.ref('password')).strict(),
+    confirm_password: Joi.string().required().label('Confirm Password').valid(Joi.ref('password')).strict(),
 
 
     email: Joi.string().label('Email').required()
@@ -29,7 +29,17 @@ const LoginSchema = Joi.object({
 }).options({ abortEarly: false })
 
 
+const ChangePasswordSchema = Joi.object({
+    current_password: Joi.string().required().label('Current Password')
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).strict(),
+    new_password: Joi.string().required().label('New Password')
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).strict(),
+    confirm_password: Joi.string().required().label('Confirm Password').valid(Joi.ref('new_password')).strict(),
+}).options({ abortEarly: false })
+
+
 module.exports = {
     RegisterSchema,
-    LoginSchema
+    LoginSchema,
+    ChangePasswordSchema
 }
