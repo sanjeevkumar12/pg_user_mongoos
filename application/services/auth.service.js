@@ -65,6 +65,15 @@ user_forgot_password_request = async (email) => {
     }
 }
 
+user_forgot_password_request_confirm  = async (verify_token) => {
+    user = await User.findByToken(verify_token)
+    if(!user || user.is_verified===false){
+        user.is_verified = true;
+        await user.save()
+        return user
+    }
+}
+
 user_verify_email = async (email) => {
     let user = await User.findByEmail(email)
     if (user){
@@ -79,5 +88,6 @@ module.exports = {
     create_user,
     user_token_details,
     user_change_password,
-    user_verify_email_address
+    user_verify_email_address,
+    user_forgot_password_request_confirm
 }

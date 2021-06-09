@@ -31,7 +31,7 @@ exports.forgot_password_request = async (req, res, next) => {
 
 
 exports.forgot_password_request_confirm = async (req, res, next) => {
-    return await auth_service.user_change_password(req.user, req.body.new_password)
+    return await auth_service.user_forgot_password_request_confirm(req.user, req.body.new_password)
 }
 
 
