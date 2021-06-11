@@ -36,9 +36,11 @@ const api_router = express.Router()
 api_router.use('/users', usersRouter);
 api_router.use('/auth', authRouter);
 app.use('/api', api_router)
-app.get('/', function( req, res) {
-  res.json({message: 'Welcome to API'})
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
 });
+
 
 
 
